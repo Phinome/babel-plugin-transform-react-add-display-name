@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 
-class Foo extends Component {
+class Foo extends PureComponent {
     render() {
         return (
         <div onClick={this.handleClick}></div>

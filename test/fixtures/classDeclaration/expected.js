@@ -26,8 +26,8 @@ var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Foo = function (_Component) {
-    (0, _inherits3.default)(Foo, _Component);
+var Foo = function (_PureComponent) {
+    (0, _inherits3.default)(Foo, _PureComponent);
 
     function Foo() {
         (0, _classCallCheck3.default)(this, Foo);
@@ -41,6 +41,6 @@ var Foo = function (_Component) {
         }
     }]);
     return Foo;
-}(_react.Component);
+}(_react.PureComponent);
 
 Foo.displayName = 'Foo';

@@ -33,7 +33,7 @@ function isDisplayNameAssignmentNode(t, name, node) {
 function resolveClassExpr(t, path) {
   const superClass = path.get('superClass');
   // TODO: handle assignment to a memeber expression
-  if (t.isIdentifier(superClass.node, { name: 'Component' }) &&
+  if ((t.isIdentifier(superClass.node, { name: 'Component' }) || t.isIdentifier(superClass.node, { name: 'PureComponent' }))&&
     t.isVariableDeclarator(path.parent) && t.isIdentifier(path.parent.id)) {
     let displayName;
     const variableName = path.parent.id.name;
@@ -59,7 +59,7 @@ function resolveClassExpr(t, path) {
 
 function resolveClassDeclar(t, path) {
   const superClass = path.get('superClass');
-  if (t.isIdentifier(superClass.node, { name: 'Component' })) {
+  if (t.isIdentifier(superClass.node, { name: 'Component' }) || t.isIdentifier(superClass.node, { name: 'PureComponent'})) {
     const displayName = path.get('id').node.name;
     const nextNode = path.getSibling(path.key + 1);
     // check whether displayName was added or not

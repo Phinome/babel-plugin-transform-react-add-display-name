@@ -42,4 +42,26 @@ var Foo = function (_Component) {
     }]);
     return Bar;
 }(_react.Component);
+
 Foo.displayName = 'Bar';
+var Boo = function (_PureComponent) {
+    (0, _inherits3.default)(Alice, _PureComponent);
+
+    function Alice() {
+        (0, _classCallCheck3.default)(this, Alice);
+        return (0, _possibleConstructorReturn3.default)(this, (Alice.__proto__ || (0, _getPrototypeOf2.default)(Alice)).apply(this, arguments));
+    }
+
+    (0, _createClass3.default)(Alice, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                'React PureComponent'
+            );
+        }
+    }]);
+    return Alice;
+}(_react.PureComponent);
+Boo.displayName = 'Alice';

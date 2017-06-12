@@ -23,7 +23,7 @@ describe('React.createClass', () => {
   });
 });
 
-describe('Component', () => {
+describe('Compoent Or PureComponent', () => {
   it('set class name to displayName for react class declaration', () => {
     testFixture('classDeclaration');
   });
