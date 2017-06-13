@@ -3,14 +3,23 @@
 export default function ({ types: t }) {
   return {
     visitor: {
-      ClassDeclaration(path, state) {
-        resolveClassDeclar(t, path, state);
+      FunctionDeclaration(path) {
+        resolveFunctionDeclar(t, path);
       },
-      CallExpression(path, state) {
-        resolveCreateClassCall(t, path, state);
+      FunctionExpression(path) {
+        resolveFunctionExpress(t, path);
       },
-      ClassExpression(path, state) {
-        resolveClassExpr(t, path, state);
+      ArrowFunctionExpression(path) {
+        resolveFunctionExpress(t, path);
+      },
+      ClassDeclaration(path) {
+        resolveClassDeclar(t, path);
+      },
+      CallExpression(path) {
+        resolveCreateClassCall(t, path);
+      },
+      ClassExpression(path) {
+        resolveClassExpr(t, path);
       }
     }
   }
@@ -92,5 +101,67 @@ function resolveCreateClassCall(t, path) {
         ));
       }
     }
+  }
+}
+
+function resolveFunctionDeclar(t, path) {
+  const displayName = path.get('id').node.name;
+  const nextNode = path.getSibling(path.key + 1);
+
+  const funcBody = path.node.body;
+  if (funcBody && Array.isArray(funcBody.body)) {
+    const returnStatement = funcBody.body.find(statement => {
+      return t.isReturnStatement(statement)
+    });
+    if (t.isJSXElement(returnStatement.argument)) {
+      if (isDisplayNameAssignmentNode(t, displayName, nextNode)) {
+        return;
+      }
+      path.insertAfter(
+        t.expressionStatement(
+          t.assignmentExpression(
+            "=",
+            t.memberExpression(
+              t.Identifier(displayName),
+              t.Identifier("displayName")
+            ),
+            t.stringLiteral(displayName)
+          )
+        )
+      );
+    }
+  }
+}
+
+function resolveFunctionExpress(t, path) {
+  if (!t.isVariableDeclarator(path.parent)) {
+    return;
+  }
+  const parentPath = path.parentPath;
+  const leftIdentfier = path.parent.id.name;
+  const displayName = path.get('id').node ? path.get('id').node.name : path.parent.id.name;
+  const nextNode = parentPath.getSibling(parentPath.key + 1);
+  const funcBody = path.node.body;
+  if (funcBody && Array.isArray(funcBody.body)) {
+    const returnStatement = funcBody.body.find((statement) => {
+        return t.isReturnStatement(statement)
+      })
+      if (t.isJSXElement(returnStatement.argument)) {
+        if (isDisplayNameAssignmentNode(t, displayName, nextNode)) {
+            return;
+          }
+          parentPath.parentPath.insertAfter(
+            t.expressionStatement(
+              t.assignmentExpression(
+                "=",
+                t.memberExpression(
+                  t.Identifier(leftIdentfier),
+                  t.Identifier("displayName")
+                ),
+                t.stringLiteral(displayName)
+              )
+            )
+          )
+      }
   }
 }
